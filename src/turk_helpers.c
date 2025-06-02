@@ -11,23 +11,42 @@
 /* ************************************************************************** */
 #include "pushswap.h"
 
+void	find_min_and_max(t_stack *current, int *min_num, int *max_num,
+		int *min_pos, int *i)
+{
+	while (current)
+	{
+		if (current->num < *min_num)
+		{
+			*min_num = current->num;
+			*min_pos = *i;
+		}
+		if (current->num > *max_num)
+		{
+			*max_num = current->num;
+		}
+		current = current->next;
+		(*i)++;
+	}
+}
+
 int	find_insert_position(t_stack *stack, int value)
 {
-	int		i;
 	t_stack	*current;
 	int		min_num;
 	int		min_pos;
 	int		max_num;
+	int		i;
 
+	i = 0;
 	if (!stack)
 		return (0);
-	i = 0;
 	current = stack;
 	min_num = current->num;
 	max_num = current->num;
 	min_pos = 0;
 	// Find min and max values and min_pos
-	while (current)
+	/*while (current)
 	{
 		if (current->num < min_num)
 		{
@@ -40,7 +59,8 @@ int	find_insert_position(t_stack *stack, int value)
 		}
 		current = current->next;
 		i++;
-	}
+	}*/
+	find_min_and_max(current, &min_num, &max_num, &min_pos, &i);
 	// If value is less than min or greater than max, insert at min_pos
 	if (value < min_num || value > max_num)
 		return (min_pos);
