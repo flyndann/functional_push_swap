@@ -6,12 +6,12 @@
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:07:20 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 11:07:22 by daflynn          ###   ########.fr       */
+/*   Updated: 2025/06/02 11:52:38 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pushswap.h"
-
+/*
 void	ft_print_stack(t_stack *stack)
 {
 	t_stack	*current;
@@ -28,7 +28,7 @@ void	ft_print_stack(t_stack *stack)
 		current = current->next;
 	}
 	ft_printf("\n");
-}
+}*/
 
 int	ft_stack_size(t_stack *stack)
 {

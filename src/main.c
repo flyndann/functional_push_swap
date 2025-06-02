@@ -40,14 +40,16 @@ int	main(int argc, char **argv)
 
 	stack_a = NULL;
 	stack_b = NULL;
-	if (argc == 2)
-		stack_a = ft_fill_stack(argv[1]);
-	else if (argc > 2)
+	if (argc > 2)
 	{
 		joined = ft_join_args(argc, argv);
 		stack_a = ft_fill_stack(joined);
 		free(joined);
 	}
+	if (ft_is_sorted(stack_a))
+		return (1);
+	if (ft_stack_size(stack_a) == 2)
+		return (ft_printf("sa\n"), 0);
 	if (ft_stack_size(stack_a) > 3)
 		push_swap(&stack_a, &stack_b);
 	else

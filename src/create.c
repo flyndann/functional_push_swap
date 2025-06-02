@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/02 11:41:53 by daflynn           #+#    #+#             */
+/*   Updated: 2025/06/02 11:42:00 by daflynn          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../libft/libft.h"
 #include "pushswap.h"
 
@@ -37,7 +49,6 @@ t_stack	*ft_fill_stack(char *arg)
 		ft_append_node(&stack, ft_create_node(n));
 		i++;
 	}
-	// free ft_split result
 	i = 0;
 	while (nums[i])
 		free(nums[i++]);

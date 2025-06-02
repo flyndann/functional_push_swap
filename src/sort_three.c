@@ -6,7 +6,7 @@
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:07:43 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 11:07:44 by daflynn          ###   ########.fr       */
+/*   Updated: 2025/06/02 11:43:52 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	sort_three(t_stack **stack)
 	}
 }
 
-// Each remaining case needs only one op and each of the remaining cases has the max in a different position
-// Thus the appropriate operation can be determined from the position of the max alone
 void	single_case(t_stack **stack)
 {
 	int	first;
