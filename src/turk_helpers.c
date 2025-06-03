@@ -11,111 +11,120 @@
 /* ************************************************************************** */
 #include "pushswap.h"
 
-void	find_min_and_max(t_stack *current, int *min_num, int *max_num,
-		int *min_pos, int *i)
+typedef struct s_vars
 {
-	while (current)
+	int	min_num;
+	int	min_pos;
+	int	max_num;
+	int	max_pos;
+	int	size;
+	int	i;
+	int	next_num;
+
+}		t_vars;
+
+// rotates target to the top of be using the minimum number of rotations
+void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
+		int target)
+{
+	if ((rot_b) > (size_b) / 2)
 	{
-		if (current->num < *min_num)
+		while ((*stack_b)->num != target)
 		{
-			*min_num = current->num;
-			*min_pos = *i;
+			rrb(stack_b);
+			ft_printf("rrb\n");
 		}
-		if (current->num > *max_num)
+	}
+	else
+	{
+		while ((*stack_b)->num != target)
 		{
-			*max_num = current->num;
+			rb(stack_b);
+			ft_printf("rb\n");
 		}
-		current = current->next;
-		(*i)++;
+	}
+}
+
+void	traverse_to_find_min(t_stack **current, int *min_num, int *min_pos,
+		int *i)
+{
+	if ((*current)->num < *min_num)
+	{
+		*min_num = (*current)->num;
+		*min_pos = *i;
 	}
 }
 
 int	find_insert_position(t_stack *stack, int value)
 {
 	t_stack	*current;
-	int		min_num;
-	int		min_pos;
-	int		max_num;
-	int		i;
+	t_vars	var;
 
-	i = 0;
 	if (!stack)
 		return (0);
 	current = stack;
-	min_num = current->num;
-	max_num = current->num;
-	min_pos = 0;
-	// Find min and max values and min_pos
-	/*while (current)
+	var.min_num = current->num;
+	var.max_num = current->num;
+	var.min_pos = 0;
+	var.max_pos = 0;
+	var.i = 0;
+	while (current)
 	{
-		if (current->num < min_num)
+		traverse_to_find_min(&current, &var.min_num, &var.min_pos, &var.i);
+		// if (current->num < var.min_num)
+		// {
+		// 	var.min_num = current->num;
+		// 	var.min_pos = var.i;
+		// }
+		if (current->num > var.max_num)
 		{
-			min_num = current->num;
-			min_pos = i;
-		}
-		if (current->num > max_num)
-		{
-			max_num = current->num;
+			var.max_num = current->num;
+			var.max_pos = var.i;
 		}
 		current = current->next;
-		i++;
-	}*/
-	find_min_and_max(current, &min_num, &max_num, &min_pos, &i);
-	// If value is less than min or greater than max, insert at min_pos
-	if (value < min_num || value > max_num)
-		return (min_pos);
-	// Otherwise find the correct place between two consecutive nodes
-	i = 0;
+		var.i++;
+	}
+	var.size = var.i;
+	if (value < var.min_num)
+		return ((var.max_pos + 1) % var.size);
+	if (value > var.max_num)
+		return ((var.max_pos + 1) % var.size);
+	var.i = 0;
 	current = stack;
-	while (current && current->next)
+	while (current)
 	{
-		if (current->num < value && value < current->next->num)
-			return (i + 1);
+		if (current->next)
+			var.next_num = current->next->num;
+		else
+			var.next_num = stack->num;
+		if (current->num < value && value < var.next_num)
+			return ((var.i + 1) % var.size);
 		current = current->next;
-		i++;
+		var.i++;
 	}
-	// Fallback to min_pos if no suitable position found
-	return (min_pos);
-}
-
-void	rotate_to_top(t_stack **stack, int rotations)
-{
-	int	size;
-
-	size = ft_stack_size(*stack);
-	if (rotations <= size / 2)
-	{
-		while (rotations-- > 0)
-		{
-			ra(stack);
-			ft_printf("ra\n");
-		}
-	}
-	else
-	{
-		rotations = size - rotations;
-		while (rotations-- > 0)
-		{
-			rra(stack);
-			ft_printf("rra\n");
-		}
-	}
+	return (0);
 }
 
 int	calculate_cost(t_stack *stack_a, t_stack *stack_b, int value)
 {
 	int	cost_a;
 	int	cost_b;
+	int	size_a;
 	int	size_b;
 
 	cost_a = find_insert_position(stack_a, value);
 	cost_b = get_index(stack_b, value);
+	size_a = ft_stack_size(stack_a);
 	size_b = ft_stack_size(stack_b);
+	if (cost_a > size_a / 2)
+		cost_a = size_a - cost_a;
 	if (cost_b > size_b / 2)
 		cost_b = size_b - cost_b;
 	return (cost_a + cost_b);
 }
 
+// find the element which requires the fewest total operations
+// to place in stack_a
 int	find_cheapest_value(t_stack *stack_a, t_stack *stack_b)
 {
 	t_stack	*current;
@@ -141,10 +150,26 @@ int	find_cheapest_value(t_stack *stack_a, t_stack *stack_b)
 	return (cheapest);
 }
 
-void	push_back_to_a(t_stack **stack_a, t_stack **stack_b)
+void	rotate_to_top(t_stack **stack, int rotations)
 {
-	while (ft_stack_size(*stack_b) > 0)
+	int	size;
+
+	size = ft_stack_size(*stack);
+	if (rotations <= size / 2)
 	{
-		execute_cheapest_move(stack_a, stack_b);
+		while (rotations-- > 0)
+		{
+			ra(stack);
+			ft_printf("ra\n");
+		}
+	}
+	else
+	{
+		rotations = size - rotations;
+		while (rotations-- > 0)
+		{
+			rra(stack);
+			ft_printf("rra\n");
+		}
 	}
 }

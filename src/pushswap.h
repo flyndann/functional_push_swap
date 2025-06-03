@@ -22,17 +22,9 @@
 typedef struct s_stack
 {
 	int				num;
-	int				index;
-	int				push_cost;
-	int				target_pos;
-	bool			above_median;
-	bool			target_above_median;
-	bool			cheapest;
 	struct s_stack	*next;
 	struct s_stack	*prev;
 	struct s_stack	*target_node;
-	struct s_stack	*head;
-	struct s_stack	*tail;
 
 }					t_stack;
 
@@ -99,4 +91,6 @@ void				rotate_to_top(t_stack **stack, int rotations);
 int					find_cheapest_value(t_stack *stack_a, t_stack *stack_b);
 void				rotate_to_top(t_stack **stack, int rotations);
 void				execute_cheapest_move(t_stack **stack_a, t_stack **stack_b);
+void				rotate_target_to_top(int rot_b, int size_b,
+						t_stack **stack_b, int target);
 #endif

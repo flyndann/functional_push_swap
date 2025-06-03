@@ -46,22 +46,7 @@ void	execute_cheapest_move(t_stack **stack_a, t_stack **stack_b)
 	if (rot_b == -1)
 		return ;
 	size_b = ft_stack_size(*stack_b);
-	if (rot_b > size_b / 2)
-	{
-		while ((*stack_b)->num != target)
-		{
-			rrb(stack_b);
-			ft_printf("rrb\n");
-		}
-	}
-	else
-	{
-		while ((*stack_b)->num != target)
-		{
-			rb(stack_b);
-			ft_printf("rb\n");
-		}
-	}
+	rotate_target_to_top(rot_b, size_b, stack_b, target);
 	rot_a = find_insert_position(*stack_a, target);
 	rotate_to_top(stack_a, rot_a);
 	pa(stack_a, stack_b);

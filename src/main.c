@@ -5,12 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 10:54:25 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 10:54:37 by daflynn          ###   ########.fr       */
+/*   Created: 2025/06/02 21:45:00 by daflynn           #+#    #+#             */
+/*   Updated: 2025/06/02 21:45:02 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../libft/libft.h"
 #include "pushswap.h"
 
 char	*ft_join_args(int argc, char **argv)
@@ -40,16 +38,33 @@ int	main(int argc, char **argv)
 
 	stack_a = NULL;
 	stack_b = NULL;
-	if (argc > 2)
+	if (argc < 2)
+		return (1);
+	if (argc == 2)
+		stack_a = ft_fill_stack(argv[1]);
+	else
 	{
 		joined = ft_join_args(argc, argv);
 		stack_a = ft_fill_stack(joined);
 		free(joined);
 	}
-	if (ft_is_sorted(stack_a))
+	if (!stack_a)
 		return (1);
+	if (ft_is_sorted(stack_a))
+	{
+		ft_stack_clear(&stack_a);
+		return (0);
+	}
 	if (ft_stack_size(stack_a) == 2)
-		return (ft_printf("sa\n"), 0);
+	{
+		if (!ft_is_sorted(stack_a))
+		{
+			ft_printf("sa\n");
+			sa(&stack_a);
+		}
+		ft_stack_clear(&stack_a);
+		return (0);
+	}
 	if (ft_stack_size(stack_a) > 3)
 		push_swap(&stack_a, &stack_b);
 	else

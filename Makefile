@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 # Project and source files
 NAME   = push_swap
-SRCS   = src/main.c src/create.c src/update.c src/read.c src/delete.c src/ops.c src/rotate.c src/reverse.c src/sort_three.c src/turk.c src/turk_helpers.c
+SRCS   = src/main.c src/create.c src/update.c src/read.c src/delete.c src/ops.c src/rotate.c src/reverse.c src/sort_three.c src/turk.c src/turk_helpers.c src/find_insert_helpers.c
 OBJS   = $(SRCS:.c=.o)
 
 # Libft

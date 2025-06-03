@@ -21,15 +21,8 @@ t_stack	*ft_create_node(int num)
 	if (!new_node)
 		return (NULL);
 	new_node->num = num;
-	new_node->index = -1;
-	new_node->push_cost = 0;
-	new_node->above_median = false;
-	new_node->cheapest = false;
 	new_node->next = NULL;
 	new_node->prev = NULL;
-	new_node->target_node = NULL;
-	new_node->head = NULL;
-	new_node->tail = NULL;
 	return (new_node);
 }
 

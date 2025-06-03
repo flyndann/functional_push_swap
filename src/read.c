@@ -6,11 +6,12 @@
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:07:20 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 11:52:38 by daflynn          ###   ########.fr       */
+/*   Updated: 2025/06/02 21:47:53 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pushswap.h"
+
 /*
 void	ft_print_stack(t_stack *stack)
 {
@@ -29,7 +30,6 @@ void	ft_print_stack(t_stack *stack)
 	}
 	ft_printf("\n");
 }*/
-
 int	ft_stack_size(t_stack *stack)
 {
 	int	count;
@@ -93,7 +93,9 @@ int	find_min_index(t_stack *stack)
 	int		index;
 	int		min_index;
 
-	current = stack->head;
+	if (!stack)
+		return (-1);
+	current = stack;
 	min = current->num;
 	index = 0;
 	min_index = 0;

@@ -9,7 +9,6 @@
 /*   Updated: 2025/06/02 11:07:34 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "pushswap.h"
 
 void	reverse(t_stack **stack)
@@ -23,6 +22,8 @@ void	reverse(t_stack **stack)
 	while (last->next)
 		last = last->next;
 	second_last = last->prev;
+	if (!second_last)
+		return ;
 	second_last->next = NULL;
 	last->prev = NULL;
 	last->next = *stack;

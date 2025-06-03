@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ops.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: daflynn <daflynn@student.42berlin.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 10:55:47 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 10:55:50 by daflynn          ###   ########.fr       */
+/*   Updated: 2025/06/02 10:55:50 by daflynn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	pb(t_stack **stack_a, t_stack **stack_b)
 		(*stack_a)->prev = NULL;
 	node->next = *stack_b;
 	node->prev = NULL;
+	if (*stack_b)
+		(*stack_b)->prev = node;
 	*stack_b = node;
 }
 
@@ -39,6 +41,8 @@ void	pa(t_stack **stack_a, t_stack **stack_b)
 		(*stack_b)->prev = NULL;
 	node->next = *stack_a;
 	node->prev = NULL;
+	if (*stack_a)
+		(*stack_a)->prev = node;
 	*stack_a = node;
 }
 
