@@ -65,9 +65,9 @@ int	is_valid_number(char *str)
 
 int	validate_input(int argc, char **argv)
 {
-	int i;
-	int j;
-	char **nums;
+	int		i;
+	int		j;
+	char	**nums;
 
 	i = 1;
 	while (i < argc)

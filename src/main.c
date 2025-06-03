@@ -31,7 +31,7 @@ char	*ft_join_args(int argc, char **argv)
 	return (joined);
 }
 
-static int	has_duplicates(t_stack *stack)
+int	has_duplicates(t_stack *stack)
 {
 	t_stack	*current;
 	t_stack	*runner;
@@ -51,11 +51,7 @@ static int	has_duplicates(t_stack *stack)
 	return (0);
 }
 
-
-
-
-
-static int	process_input(int argc, char **argv, t_stack **stack_a)
+int	process_input(int argc, char **argv, t_stack **stack_a)
 {
 	char	*joined;
 
