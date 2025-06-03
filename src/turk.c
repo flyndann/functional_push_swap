@@ -6,13 +6,22 @@
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 10:18:39 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 11:49:01 by daflynn          ###   ########.fr       */
+/*   Updated: 2025/06/03 20:13:57 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pushswap.h"
 
-// remains because it is step 1
+typedef struct s_var
+{
+	int	target;
+	int	rot_a;
+	int	rot_b;
+	int	size_a;
+	int	size_b;
+
+}		t_var;
+
 void	initial_push(t_stack **stack_a, t_stack **stack_b)
 {
 	pb(stack_a, stack_b);
@@ -21,43 +30,33 @@ void	initial_push(t_stack **stack_a, t_stack **stack_b)
 	ft_printf("pb\n");
 }
 
-// remains becase it is step 2
 void	push_until_three(t_stack **a, t_stack **b)
 {
-	int	target;
-	int	rot_a;
-	int	rot_b;
+	t_var	var;
+	int		index;
 
 	while (ft_stack_size(*a) > 3)
 	{
-		target = find_cheapest_push_to_b(*a, *b);
-		rot_a = get_index(*a, target);
-		rot_b = find_insert_position(*b, target);
-		while (rot_a > 0 && rot_b > 0 && rot_a <= ft_stack_size(*a) / 2
-			&& rot_b <= ft_stack_size(*b) / 2)
-		{
-			rr(a, b);
-			ft_printf("rr\n");
-			rot_a--;
-			rot_b--;
-		}
-		while (rot_a < ft_stack_size(*a) && rot_b < ft_stack_size(*b)
-			&& rot_a > ft_stack_size(*a) / 2 && rot_b > ft_stack_size(*b) / 2)
-		{
-			rrr(a, b);
-			ft_printf("rrr\n");
-			rot_a++;
-			rot_b++;
-		}
-		rotate_to_top(a, rot_a);
-		rotate_target_to_top(rot_b, ft_stack_size(*b), b,
-			find_insert_position(*b, target));
+		var.size_a = ft_stack_size(*a);
+		var.size_b = ft_stack_size(*b);
+		var.target = find_cheapest_push_to_b(*a, *b);
+		var.rot_a = get_index(*a, var.target);
+		var.rot_b = find_insert_position(*b, var.target);
+		if (var.rot_a <= var.size_a / 2 && var.rot_b <= var.size_b / 2)
+			while (var.rot_a-- > 0 && var.rot_b-- > 0 && ft_printf("rr\n"))
+				rr(a, b);
+		else if (var.rot_a > var.size_a / 2 && var.rot_b > var.size_b / 2)
+			while (var.rot_a++ < var.size_a && var.rot_b++ < var.size_b
+				&& ft_printf("rrr\n"))
+				rrr(a, b);
+		rotate_to_top(a, var.rot_a);
+		index = find_insert_position(*b, var.target);
+		rotate_target_to_top(var.rot_b, var.size_b, b, index);
 		pb(a, b);
 		ft_printf("pb\n");
 	}
 }
 
-// remains because it is step 4
 void	execute_cheapest_move(t_stack **stack_a, t_stack **stack_b)
 {
 	int	target;
@@ -69,8 +68,6 @@ void	execute_cheapest_move(t_stack **stack_a, t_stack **stack_b)
 	if (target == -1)
 		return ;
 	rot_b = get_index(*stack_b, target);
-	if (rot_b == -1)
-		return ;
 	size_b = ft_stack_size(*stack_b);
 	rotate_target_to_top(rot_b, size_b, stack_b, target);
 	rot_a = find_insert_position(*stack_a, target);
@@ -79,7 +76,6 @@ void	execute_cheapest_move(t_stack **stack_a, t_stack **stack_b)
 	ft_printf("pa\n");
 }
 
-// remains because it is step 5
 void	final_align(t_stack **stack_a)
 {
 	int	min_index;
@@ -88,38 +84,28 @@ void	final_align(t_stack **stack_a)
 	min_index = find_min_index(*stack_a);
 	size = ft_stack_size(*stack_a);
 	if (min_index <= size / 2)
-	{
-		while (min_index-- > 0)
-		{
+		while (min_index-- > 0 && ft_printf("ra\n"))
 			ra(stack_a);
-			ft_printf("ra\n");
-		}
-	}
 	else
-	{
-		while (min_index++ < size)
-		{
+		while (min_index++ < size && ft_printf("rra\n"))
 			rra(stack_a);
-			ft_printf("rra\n");
-		}
-	}
 }
 
-/*
-Flow of mechanical Turk alg:
-Blind push of two elements
-
-*/
+/*Flow of mechanical turk:
+initial blind bush of 2 to b
+find the min number of rotations to push to b an d push above max in b
+continue until 3 remain in a
+call optimized sort for three
+once a is sorted, find the cheapest push back to a in sorted order
+rotate the minimum to the first place according to cheapest direction*/
 void	push_swap(t_stack **stack_a, t_stack **stack_b)
 {
 	initial_push(stack_a, stack_b);
 	push_until_three(stack_a, stack_b);
 	sort_three(stack_a);
-	if (ft_stack_size(*stack_a) == 2 && !ft_is_sorted(*stack_a))
-	{
+	if (ft_stack_size(*stack_a) == 2 && !ft_is_sorted(*stack_a)
+		&& ft_printf("sa\n"))
 		sa(stack_a);
-		ft_printf("sa\n");
-	}
 	while (ft_stack_size(*stack_b) > 0)
 		execute_cheapest_move(stack_a, stack_b);
 	final_align(stack_a);
