@@ -39,7 +39,7 @@ void	execute_cheapest_move(t_stack **stack_a, t_stack **stack_b)
 	int	size_b;
 	int	rot_a;
 
-	target = find_cheapest_value(*stack_a, *stack_b);
+	target = find_cheapest_push_to_a(*stack_a, *stack_b);
 	if (target == -1)
 		return ;
 	rot_b = get_index(*stack_b, target);
@@ -79,6 +79,11 @@ void	final_align(t_stack **stack_a)
 	}
 }
 
+/*
+Flow of mechanical Turk alg:
+Blind push of two elements
+
+*/
 void	push_swap(t_stack **stack_a, t_stack **stack_b)
 {
 	initial_push(stack_a, stack_b);

@@ -6,12 +6,15 @@
 /*   By: daflynn <daflynn@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 21:45:00 by daflynn           #+#    #+#             */
-/*   Updated: 2025/06/02 21:45:02 by daflynn          ###   ########.fr       */
+/*   Updated: 2025/06/03 17:28:25 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pushswap.h"
 
+/*Joins all arguments (excluding filename obviously)
+together as a single string so that stack
+can be filled without any type clashes */
 char	*ft_join_args(int argc, char **argv)
 {
 	char	*joined;
@@ -31,26 +34,32 @@ char	*ft_join_args(int argc, char **argv)
 	return (joined);
 }
 
+/*Brute force alg to check for duplicates
+by comparing each number in the stack to every
+node that follows it */
 int	has_duplicates(t_stack *stack)
 {
 	t_stack	*current;
-	t_stack	*runner;
+	t_stack	*next_node;
 
 	current = stack;
 	while (current)
 	{
-		runner = current->next;
-		while (runner)
+		next_node = current->next;
+		while (next_node)
 		{
-			if (current->num == runner->num)
+			if (current->num == next_node->num)
 				return (1);
-			runner = runner->next;
+			next_node = next_node->next;
 		}
 		current = current->next;
 	}
 	return (0);
 }
 
+/*If single argument is given, fills stack with exactly that string
+If multiple arguments given, they will be combined to harmonize
+Fails on empty stack or occurrence of duplicates*/
 int	process_input(int argc, char **argv, t_stack **stack_a)
 {
 	char	*joined;
@@ -68,7 +77,8 @@ int	process_input(int argc, char **argv, t_stack **stack_a)
 	return (1);
 }
 
-static void	handle_two_nodes(t_stack **stack_a)
+/*An unsorted list of two only requires sa 100% of the time*/
+void	handle_two_nodes(t_stack **stack_a)
 {
 	if (!ft_is_sorted(*stack_a))
 	{
@@ -77,6 +87,14 @@ static void	handle_two_nodes(t_stack **stack_a)
 	}
 }
 
+/*
+ *Main flow of program:
+ Exit program if only one argument given (empty line)
+ check input and attempt to process into single string
+ Print Error if either responsible function fails at this point
+ Handle special cases for initial stack of three or less
+ In ALL other cases, run the main push_swap algorithm
+ * */
 int	main(int argc, char **argv)
 {
 	t_stack	*stack_a;

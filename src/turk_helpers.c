@@ -53,7 +53,7 @@ int	calculate_cost(t_stack *stack_a, t_stack *stack_b, int value)
 
 // find the element which requires the fewest total operations
 // to place in stack_a
-int	find_cheapest_value(t_stack *stack_a, t_stack *stack_b)
+int	find_cheapest_push_to_a(t_stack *stack_a, t_stack *stack_b)
 {
 	t_stack	*current;
 	int		min_cost;
@@ -76,6 +76,12 @@ int	find_cheapest_value(t_stack *stack_a, t_stack *stack_b)
 		current = current->next;
 	}
 	return (cheapest);
+}
+
+// an exact mirror image of its sister
+int	find_cheapest_push_to_b(t_stack *stack_a, t_stack *stack_b)
+{
+	return (find_cheapest_push_to_a(stack_b, stack_a));
 }
 
 void	rotate_to_top(t_stack **stack, int rotations)

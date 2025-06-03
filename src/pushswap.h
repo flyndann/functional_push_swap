@@ -88,7 +88,7 @@ void				push_swap(t_stack **stack_a, t_stack **stack_b);
 // turk funcs
 int					find_insert_position(t_stack *stack, int value);
 void				rotate_to_top(t_stack **stack, int rotations);
-int					find_cheapest_value(t_stack *stack_a, t_stack *stack_b);
+int					find_cheapest_push_to_a(t_stack *stack_a, t_stack *stack_b);
 void				rotate_to_top(t_stack **stack, int rotations);
 void				execute_cheapest_move(t_stack **stack_a, t_stack **stack_b);
 void				rotate_target_to_top(int rot_b, int size_b,

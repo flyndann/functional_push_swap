@@ -12,6 +12,14 @@
 
 #include "pushswap.h"
 
+/*function to ascertain the specific shape known as hogback
+also known as fuji for emulating this shape
+						_____________
+						/		(3)		\
+					/						\___(2)_______
+				/											\
+_____(1)____/												\____
+*/
 int	ft_is_hogback(t_stack *stack)
 {
 	int	a;
@@ -29,6 +37,10 @@ int	ft_is_hogback(t_stack *stack)
 		return (0);
 }
 
+/*This function checks if already sorted and cycles
+through the two cases requiring two operations
+,i.e. when reversed or when in hogback/fuji form (1 3 2)
+If none of these trigger, it will call the single case function*/
 void	sort_three(t_stack **stack)
 {
 	if (ft_is_sorted(*stack))
@@ -51,6 +63,10 @@ void	sort_three(t_stack **stack)
 	}
 }
 
+/*This function covers all three cases where only one operation is necessary
+e.g. 3 1 2 requires only ra, 2 1 3 requires only sa and 2 3 1 requires only rra
+
+*/
 void	single_case(t_stack **stack)
 {
 	int	first;
