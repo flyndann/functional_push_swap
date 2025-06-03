@@ -11,17 +11,6 @@
 /* ************************************************************************** */
 #include "pushswap.h"
 
-typedef struct s_vars
-{
-	int	min_num;
-	int	min_pos;
-	int	max_num;
-	int	max_pos;
-	int	size;
-	int	i;
-	int	next_num;
-
-}		t_vars;
 
 // rotates target to the top of be using the minimum number of rotations
 void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
@@ -45,65 +34,7 @@ void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
 	}
 }
 
-void	traverse_to_find_min(t_stack **current, int *min_num, int *min_pos,
-		int *i)
-{
-	if ((*current)->num < *min_num)
-	{
-		*min_num = (*current)->num;
-		*min_pos = *i;
-	}
-}
 
-int	find_insert_position(t_stack *stack, int value)
-{
-	t_stack	*current;
-	t_vars	var;
-
-	if (!stack)
-		return (0);
-	current = stack;
-	var.min_num = current->num;
-	var.max_num = current->num;
-	var.min_pos = 0;
-	var.max_pos = 0;
-	var.i = 0;
-	while (current)
-	{
-		traverse_to_find_min(&current, &var.min_num, &var.min_pos, &var.i);
-		// if (current->num < var.min_num)
-		// {
-		// 	var.min_num = current->num;
-		// 	var.min_pos = var.i;
-		// }
-		if (current->num > var.max_num)
-		{
-			var.max_num = current->num;
-			var.max_pos = var.i;
-		}
-		current = current->next;
-		var.i++;
-	}
-	var.size = var.i;
-	if (value < var.min_num)
-		return ((var.max_pos + 1) % var.size);
-	if (value > var.max_num)
-		return ((var.max_pos + 1) % var.size);
-	var.i = 0;
-	current = stack;
-	while (current)
-	{
-		if (current->next)
-			var.next_num = current->next->num;
-		else
-			var.next_num = stack->num;
-		if (current->num < value && value < var.next_num)
-			return ((var.i + 1) % var.size);
-		current = current->next;
-		var.i++;
-	}
-	return (0);
-}
 
 int	calculate_cost(t_stack *stack_a, t_stack *stack_b, int value)
 {
