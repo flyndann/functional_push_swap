@@ -9,6 +9,7 @@
 /*   Updated: 2025/06/02 21:45:02 by daflynn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "pushswap.h"
 
 char	*ft_join_args(int argc, char **argv)
@@ -30,45 +31,79 @@ char	*ft_join_args(int argc, char **argv)
 	return (joined);
 }
 
+static int	has_duplicates(t_stack *stack)
+{
+	t_stack	*current;
+	t_stack	*runner;
+
+	current = stack;
+	while (current)
+	{
+		runner = current->next;
+		while (runner)
+		{
+			if (current->num == runner->num)
+				return (1);
+			runner = runner->next;
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
+
+
+
+
+static int	process_input(int argc, char **argv, t_stack **stack_a)
+{
+	char	*joined;
+
+	if (argc == 2)
+		*stack_a = ft_fill_stack(argv[1]);
+	else
+	{
+		joined = ft_join_args(argc, argv);
+		*stack_a = ft_fill_stack(joined);
+		free(joined);
+	}
+	if (!*stack_a || has_duplicates(*stack_a))
+		return (0);
+	return (1);
+}
+
+static void	handle_two_nodes(t_stack **stack_a)
+{
+	if (!ft_is_sorted(*stack_a))
+	{
+		ft_printf("sa\n");
+		sa(stack_a);
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_stack	*stack_a;
 	t_stack	*stack_b;
-	char	*joined;
 
+	if (argc < 2)
+		return (0);
 	stack_a = NULL;
 	stack_b = NULL;
-	if (argc < 2)
-		return (1);
-	if (argc == 2)
-		stack_a = ft_fill_stack(argv[1]);
-	else
+	if (!validate_input(argc, argv) || !process_input(argc, argv, &stack_a))
 	{
-		joined = ft_join_args(argc, argv);
-		stack_a = ft_fill_stack(joined);
-		free(joined);
-	}
-	if (!stack_a)
+		ft_putstr_fd("Error\n", 2);
+		ft_stack_clear(&stack_a);
 		return (1);
+	}
 	if (ft_is_sorted(stack_a))
-	{
 		ft_stack_clear(&stack_a);
-		return (0);
-	}
-	if (ft_stack_size(stack_a) == 2)
-	{
-		if (!ft_is_sorted(stack_a))
-		{
-			ft_printf("sa\n");
-			sa(&stack_a);
-		}
-		ft_stack_clear(&stack_a);
-		return (0);
-	}
-	if (ft_stack_size(stack_a) > 3)
-		push_swap(&stack_a, &stack_b);
-	else
+	else if (ft_stack_size(stack_a) == 2)
+		handle_two_nodes(&stack_a);
+	else if (ft_stack_size(stack_a) == 3)
 		sort_three(&stack_a);
+	else
+		push_swap(&stack_a, &stack_b);
 	ft_stack_clear(&stack_a);
 	ft_stack_clear(&stack_b);
 	return (0);

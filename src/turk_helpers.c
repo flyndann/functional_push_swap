@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 #include "pushswap.h"
 
-
 // rotates target to the top of be using the minimum number of rotations
 void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
 		int target)
@@ -33,8 +32,6 @@ void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
 		}
 	}
 }
-
-
 
 int	calculate_cost(t_stack *stack_a, t_stack *stack_b, int value)
 {

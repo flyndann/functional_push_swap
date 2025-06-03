@@ -93,4 +93,7 @@ void				rotate_to_top(t_stack **stack, int rotations);
 void				execute_cheapest_move(t_stack **stack_a, t_stack **stack_b);
 void				rotate_target_to_top(int rot_b, int size_b,
 						t_stack **stack_b, int target);
+int					is_valid_number(char *str);
+int					validate_input(int argc, char **argv);
+
 #endif

@@ -12,81 +12,89 @@
 
 #include "pushswap.h"
 
-typedef struct s_vars
+/*
+ * init_min_max: Finds min/max values and their positions in stack
+ * min_max array format:
+ * [0] = min_val, [1] = max_val, [2] = min_pos, [3] = max_pos
+ * size parameter returns the list length
+ */
+static void	init_min_max(t_stack *stack, int min_max[4], int *size)
 {
-	int	min_num;
-	int	max_num;
-	int	min_pos;
-	int	max_pos;
-	int	i;
-	int	size;
-	int	next_num;
-}		t_vars;
+	t_stack	*current;
 
-void	update_min(t_stack **current, int *min_num, int *min_pos, int *i)
-{
-	if ((*current)->num < *min_num)
+	min_max[0] = stack->num;
+	min_max[1] = stack->num;
+	min_max[2] = 0;
+	min_max[3] = 0;
+	*size = 0;
+	current = stack;
+	while (current)
 	{
-		*min_num = (*current)->num;
-		*min_pos = *i;
+		if (current->num < min_max[0])
+		{
+			min_max[0] = current->num;
+			min_max[2] = *size;
+		}
+		if (current->num > min_max[1])
+		{
+			min_max[1] = current->num;
+			min_max[3] = *size;
+		}
+		current = current->next;
+		(*size)++;
 	}
 }
 
-void	update_max(t_stack **current, int *max_num, int *max_pos, int *i)
+/*
+ * insert_outside_bounds: Handles case when value is smaller than min
+ * or larger than max in the stack. Returns position after max value,
+ * wrapping around using modulo for circular list behavior.
+ */
+static int	insert_outside_bounds(int max_pos, int size)
 {
-	if ((*current)->num > *max_num)
+	return ((max_pos + 1) % size);
+}
+
+/*
+ * find_position: Locates insertion point for value within stack's min-max range
+ * Returns the position where value should be inserted to maintain sorted order
+ * Uses modulo to handle circular list wrapping
+ */
+static int	find_position(t_stack *stack, int value, int size)
+{
+	t_stack	*current;
+	int		index;
+
+	index = 0;
+	current = stack;
+	while (current)
 	{
-		*max_num = (*current)->num;
-		*max_pos = *i;
+		if (current->next && current->num < value && value < current->next->num)
+			return ((index + 1) % size);
+		else if (!current->next && current->num < value && value < stack->num)
+			return ((index + 1) % size);
+		current = current->next;
+		index++;
 	}
+	return (0);
 }
 
-int	largest_or_smallest(int value, int *min_num, int *max_num, int *max_pos,
-		int *size)
-{
-	if (value < *min_num)
-		return ((*max_pos + 1) % *size);
-	if (value > *max_num)
-		return ((*max_pos + 1) % *size);
-	return (-1);
-}
-
+/*
+ * find_insert_position: Main function to determine where to insert a value
+ * in a circular sorted stack. Handles three cases:
+ * 1. Empty stack (returns 0)
+ * 2. Value outside current min/max (insert after max)
+ * 3. Value within range (find correct sorted position)
+ */
 int	find_insert_position(t_stack *stack, int value)
 {
-	t_stack *current;
-	t_vars var;
+	int	min_max[4];
+	int	size;
 
 	if (!stack)
 		return (0);
-	current = stack;
-	var.min_num = current->num;
-	var.max_num = current->num;
-	var.min_pos = 0;
-	var.max_pos = 0;
-	var.i = 0;
-	while (current)
-	{
-		update_min(&current, &var.min_num, &var.min_pos, &var.i);
-		update_max(&current, &var.max_num, &var.max_pos, &var.i);
-		current = current->next;
-		var.i++;
-	}
-	var.size = var.i;
-	if (value < var.min_num || value > var.max_num)
-		return (largest_or_smallest(value, &var.min_num, &var.max_num,
-				&var.max_pos, &var.size));
-	var.i = 0;
-	current = stack;
-	while (current)
-	{
-		if (current->next)
-			var.next_num = current->next->num;
-		else
-			var.next_num = stack->num;
-		if (current->num < value && value < var.next_num)
-			return ((var.i + 1) % var.size);
-		current = current->next;
-		var.i++;
-	}
-	return (0);
+	init_min_max(stack, min_max, &size);
+	if (value < min_max[0] || value > min_max[1])
+		return (insert_outside_bounds(min_max[3], size));
+	return (find_position(stack, value, size));
 }
