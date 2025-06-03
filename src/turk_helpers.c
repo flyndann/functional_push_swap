@@ -11,13 +11,25 @@
 /* ************************************************************************** */
 #include "pushswap.h"
 
+typedef struct s_vars
+{
+	int	min_cost;
+	int	cheapest;
+	int	cost;
+	int	found;
+
+}		t_vars;
+
 // rotates target to the top of be using the minimum number of rotations
 void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
 		int target)
 {
-	if ((rot_b) > (size_b) / 2)
+	int	limit;
+
+	limit = size_b;
+	if (rot_b > size_b / 2)
 	{
-		while ((*stack_b)->num != target)
+		while ((*stack_b)->num != target && limit-- > 0)
 		{
 			rrb(stack_b);
 			ft_printf("rrb\n");
@@ -25,7 +37,7 @@ void	rotate_target_to_top(int rot_b, int size_b, t_stack **stack_b,
 	}
 	else
 	{
-		while ((*stack_b)->num != target)
+		while ((*stack_b)->num != target && limit-- > 0)
 		{
 			rb(stack_b);
 			ft_printf("rb\n");
@@ -51,34 +63,33 @@ int	calculate_cost(t_stack *stack_a, t_stack *stack_b, int value)
 	return (cost_a + cost_b);
 }
 
-// find the element which requires the fewest total operations
-// to place in stack_a
 int	find_cheapest_push_to_a(t_stack *stack_a, t_stack *stack_b)
 {
 	t_stack	*current;
-	int		min_cost;
-	int		cheapest;
-	int		cost;
+	t_vars	var;
 
 	if (!stack_b)
 		return (-1);
 	current = stack_b;
-	min_cost = INT_MAX;
-	cheapest = 0;
+	var.min_cost = INT_MAX;
+	var.cheapest = 0;
+	var.found = 0;
 	while (current)
 	{
-		cost = calculate_cost(stack_a, stack_b, current->num);
-		if (cost < min_cost)
+		var.cost = calculate_cost(stack_a, stack_b, current->num);
+		if (!var.found || var.cost < var.min_cost)
 		{
-			min_cost = cost;
-			cheapest = current->num;
+			var.min_cost = var.cost;
+			var.cheapest = current->num;
+			var.found = 1;
 		}
 		current = current->next;
 	}
-	return (cheapest);
+	if (!var.found)
+		return (-1);
+	return (var.cheapest);
 }
 
-// an exact mirror image of its sister
 int	find_cheapest_push_to_b(t_stack *stack_a, t_stack *stack_b)
 {
 	return (find_cheapest_push_to_a(stack_b, stack_a));

@@ -22,11 +22,37 @@ void	initial_push(t_stack **stack_a, t_stack **stack_b)
 }
 
 // remains becase it is step 2
-void	push_until_three(t_stack **stack_a, t_stack **stack_b)
+void	push_until_three(t_stack **a, t_stack **b)
 {
-	while (ft_stack_size(*stack_a) > 3)
+	int	target;
+	int	rot_a;
+	int	rot_b;
+
+	while (ft_stack_size(*a) > 3)
 	{
-		pb(stack_a, stack_b);
+		target = find_cheapest_push_to_b(*a, *b);
+		rot_a = get_index(*a, target);
+		rot_b = find_insert_position(*b, target);
+		while (rot_a > 0 && rot_b > 0 && rot_a <= ft_stack_size(*a) / 2
+			&& rot_b <= ft_stack_size(*b) / 2)
+		{
+			rr(a, b);
+			ft_printf("rr\n");
+			rot_a--;
+			rot_b--;
+		}
+		while (rot_a < ft_stack_size(*a) && rot_b < ft_stack_size(*b)
+			&& rot_a > ft_stack_size(*a) / 2 && rot_b > ft_stack_size(*b) / 2)
+		{
+			rrr(a, b);
+			ft_printf("rrr\n");
+			rot_a++;
+			rot_b++;
+		}
+		rotate_to_top(a, rot_a);
+		rotate_target_to_top(rot_b, ft_stack_size(*b), b,
+			find_insert_position(*b, target));
+		pb(a, b);
 		ft_printf("pb\n");
 	}
 }

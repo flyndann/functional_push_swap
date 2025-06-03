@@ -95,5 +95,5 @@ void				rotate_target_to_top(int rot_b, int size_b,
 						t_stack **stack_b, int target);
 int					is_valid_number(char *str);
 int					validate_input(int argc, char **argv);
-
+int					find_cheapest_push_to_b(t_stack *stack_a, t_stack *stack_b);
 #endif
